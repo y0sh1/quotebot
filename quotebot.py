@@ -131,8 +131,8 @@ quote_keyboard = [['/quotelist', '/programma', '/quote']]
 
 def start(bot, update):
     conversation_data[update.message.chat_id] = QuoteConversationMeta()
-    bot.send_message(chat_id=update.message.chat_id, text="Hoi! Studiereis bot staat klaar voor het opnemen van "
-                                                          "quotes. Begin met /quote om een quote toe te voegen")
+    bot.send_message(chat_id=update.message.chat_id, text="Hoi %s! Studiereis bot staat klaar voor het opnemen van "
+                                                          "quotes. Begin met /quote om een quote toe te voegen" % update.message.chat.first_name)
 
 
 def stop(bot, update):
