@@ -247,6 +247,8 @@ def get_program(bot, update):
             update.message.reply_text(value)
 
 def get_hostel(bot, update):
+    update.message.reply_text("Hier is het hostel:\n"
+                              "bul. \"Hristo Botev\" 10, 1606 Sofia Center, Sofia, Bulgarije")
     bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426)
 
 def main():
