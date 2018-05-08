@@ -1,5 +1,5 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
-from telegram import ReplyKeyboardMarkup
+from telegram import ReplyKeyboardMarkup, Location
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Float, Text, Boolean
@@ -126,13 +126,15 @@ dispatcher = updater.dispatcher
 
 reply_keyboard = [['/cancel', '/submit']]
 reply_keyboard_skip = reply_keyboard
-quote_keyboard = [['/quotelist', '/programma', '/quote']]
+quote_keyboard = [['/quotelist', '/programma', '/quote', '/hostel']]
 
 
 def start(bot, update):
     conversation_data[update.message.chat_id] = QuoteConversationMeta()
     bot.send_message(chat_id=update.message.chat_id, text="Hoi! Studiereis bot staat klaar voor het opnemen van "
-                                                          "quotes. Begin met /quote om een quote toe te voegen")
+                                                          "quotes. Begin met /quote om een quote toe te voegen, \n"
+                                                          "/programma om het programma in te zien en\n"
+                                                          "/hostel om de locatie van ons hostel te krijgen")
 
 
 def stop(bot, update):
@@ -142,7 +144,8 @@ def stop(bot, update):
 def help(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="/quote - Quote toevoegen\n"
                                                           "/quotelist - Quote lijst\n"
-                                                          "/programma - Krijg het programma")
+                                                          "/programma - Krijg het programma\n"
+                                                          "/hostel - Locatie van ons hostel")
 
 
 def start_quote(bot, update):
@@ -239,12 +242,15 @@ def get_program(bot, update):
         if key <= now >= key:
             update.message.reply_text(value)
 
+def get_hostel(bot, update):
+    bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426)
 
 def main():
     start_handler = CommandHandler('start', start)
     help_handler = CommandHandler('help', help)
     program_handler = CommandHandler('programma', get_program)
     quotes_handler = CommandHandler('quotelist', get_quotes)
+    hostel_handler = CommandHandler('hostel', get_hostel)
 
     quote_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('quote', start_quote)],
@@ -265,6 +271,7 @@ def main():
     dispatcher.add_handler(help_handler)
     dispatcher.add_handler(program_handler)
     dispatcher.add_handler(quotes_handler)
+    dispatcher.add_handler(hostel_handler)
 
     dispatcher.add_handler(quote_conv_handler)
 
