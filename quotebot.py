@@ -79,7 +79,7 @@ dispatcher = updater.dispatcher
 
 reply_keyboard = [['/cancel', '/submit']]
 reply_keyboard_skip = reply_keyboard
-quote_keyboard = [['/quotelist', '/programma', '/quote', '/hostel']]
+quote_keyboard = [['/quotelist', '/programma'],['/quote','/hostel']]
 
 
 def start(bot, update):
@@ -87,7 +87,8 @@ def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="Hoi %s! Studiereis bot staat klaar voor het opnemen van "
                                                           "quotes. Begin met /quote om een quote toe te voegen, \n"
                                                           "/programma om het programma in te zien en\n"
-                                                          "/hostel om de locatie van ons hostel te krijgen." % update.message.chat.first_name)
+                                                          "/hostel om de locatie van ons hostel te krijgen." % update.message.chat.first_name,
+                     reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 
