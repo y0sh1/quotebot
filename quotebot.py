@@ -79,7 +79,7 @@ dispatcher = updater.dispatcher
 
 reply_keyboard = [['/cancel', '/submit']]
 reply_keyboard_skip = reply_keyboard
-quote_keyboard = [['/quotelist', '/programma', '/quote', '/hostel']]
+quote_keyboard = [['/quotelist', '/programma'],['/quote','/hostel']]
 
 
 def start(bot, update):
@@ -87,7 +87,8 @@ def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="Hoi %s! Studiereis bot staat klaar voor het opnemen van "
                                                           "quotes. Begin met /quote om een quote toe te voegen, \n"
                                                           "/programma om het programma in te zien en\n"
-                                                          "/hostel om de locatie van ons hostel te krijgen." % update.message.chat.first_name)
+                                                          "/hostel om de locatie van ons hostel te krijgen." % update.message.chat.first_name,
+                     reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 
@@ -100,7 +101,8 @@ def help(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="/quote - Quote toevoegen\n"
                                                           "/quotelist - Quote lijst\n"
                                                           "/programma - Krijg het programma\n"
-                                                          "/hostel - Locatie van ons hostel")
+                                                          "/hostel - Locatie van ons hostel",
+                     reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 def start_quote(bot, update):
@@ -202,11 +204,13 @@ def get_program(bot, update):
 def get_hostel(bot, update):
     update.message.reply_text("Hier is het hostel:\n"
                               "bul. \"Hristo Botev\" 10, 1606 Sofia Center, Sofia, Bulgarije")
-    bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426)
+    bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426,
+                      reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 def get_uptime(bot, update):
-    update.message.reply_text("Script is gestart op %s " % start_time)
+    update.message.reply_text("Script is gestart op %s " % start_time,
+                              reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 def main():
