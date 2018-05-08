@@ -21,7 +21,7 @@ config = yaml.load(open("config.yml"))
 Base = declarative_base()
 
 conversation_data = {}
-
+start_time = datetime.now().strftime("%Y-%m-%d om %H:%M:%S")
 
 class QuoteModel(Base):
     __tablename__ = 'quote'
@@ -251,6 +251,11 @@ def get_hostel(bot, update):
                               "bul. \"Hristo Botev\" 10, 1606 Sofia Center, Sofia, Bulgarije")
     bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426)
 
+
+def get_uptime(bot, update):
+    update.message.reply_text("Script is gestart op %s " % start_time)
+
+
 def main():
     start_handler = CommandHandler('start', start)
     stop_handler = CommandHandler('stop', stop)
@@ -258,6 +263,7 @@ def main():
     program_handler = CommandHandler('programma', get_program)
     quotes_handler = CommandHandler('quotelist', get_quotes)
     hostel_handler = CommandHandler('hostel', get_hostel)
+    uptime_handler = CommandHandler('uptime', get_uptime)
 
     quote_conv_handler = ConversationHandler(
         entry_points=[CommandHandler('quote', start_quote)],
@@ -280,6 +286,7 @@ def main():
     dispatcher.add_handler(program_handler)
     dispatcher.add_handler(quotes_handler)
     dispatcher.add_handler(hostel_handler)
+    dispatcher.add_handler(uptime_handler)
 
     dispatcher.add_handler(quote_conv_handler)
 
