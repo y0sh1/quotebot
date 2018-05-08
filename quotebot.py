@@ -101,7 +101,8 @@ def help(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text="/quote - Quote toevoegen\n"
                                                           "/quotelist - Quote lijst\n"
                                                           "/programma - Krijg het programma\n"
-                                                          "/hostel - Locatie van ons hostel")
+                                                          "/hostel - Locatie van ons hostel",
+                     reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 def start_quote(bot, update):
@@ -203,11 +204,13 @@ def get_program(bot, update):
 def get_hostel(bot, update):
     update.message.reply_text("Hier is het hostel:\n"
                               "bul. \"Hristo Botev\" 10, 1606 Sofia Center, Sofia, Bulgarije")
-    bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426)
+    bot.send_location(chat_id=update.message.chat_id, latitude=42.690711, longitude=23.314426,
+                      reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 def get_uptime(bot, update):
-    update.message.reply_text("Script is gestart op %s " % start_time)
+    update.message.reply_text("Script is gestart op %s " % start_time,
+                              reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
 
 def main():
