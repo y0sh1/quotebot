@@ -131,10 +131,12 @@ quote_keyboard = [['/quotelist', '/programma', '/quote', '/hostel']]
 
 def start(bot, update):
     conversation_data[update.message.chat_id] = QuoteConversationMeta()
-    bot.send_message(chat_id=update.message.chat_id, text="Hoi! Studiereis bot staat klaar voor het opnemen van "
+    bot.send_message(chat_id=update.message.chat_id, text="Hoi %s! Studiereis bot staat klaar voor het opnemen van "
                                                           "quotes. Begin met /quote om een quote toe te voegen, \n"
                                                           "/programma om het programma in te zien en\n"
-                                                          "/hostel om de locatie van ons hostel te krijgen")
+                                                          "/hostel om de locatie van ons hostel te krijgen" % update.message.chat.first_name)
+
+
 
 
 def stop(bot, update):
@@ -166,7 +168,7 @@ def save_quote_text(bot, update):
 
 def save_author(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
-                     text="Waar werd het gezegd? Deel a.u.b. je huidige locatie.",
+                     text="Waar werd het gezegd? Deel a.u.b. je huidige locatie (druk op het 📎 icoon).",
                      reply_markup=ReplyKeyboardMarkup(reply_keyboard_skip))
     conversation_data[update.message.chat_id].quote.author = update.message.text
     return LOCATION
@@ -228,8 +230,8 @@ def cancel_quote(bot, update):
 
 
 def get_quotes(bot, update):
-    quotes = session.query(QuoteModel).all()
-    message_string = "De volgende quotes ken ik al:\n"
+    quotes = session.query(QuoteModel).order_by('id desc').limit(20).all()
+    message_string = "Dit zijn de nieuwste 20 quotes:\n\n"
     for quote in quotes:
         message_string += "%s - %s\n" % (quote.quote, quote.author)
     update.message.reply_text(message_string,
@@ -238,8 +240,10 @@ def get_quotes(bot, update):
 
 def get_program(bot, update):
     now = datetime.now()
+    now = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    logger.info("Nu is het %s" % now)
     for key, value in PROGRAMMA.items():
-        if key <= now >= key:
+        if key == now:
             update.message.reply_text(value)
 
 def get_hostel(bot, update):
