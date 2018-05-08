@@ -253,6 +253,7 @@ def get_hostel(bot, update):
 
 def main():
     start_handler = CommandHandler('start', start)
+    stop_handler = CommandHandler('stop', stop)
     help_handler = CommandHandler('help', help)
     program_handler = CommandHandler('programma', get_program)
     quotes_handler = CommandHandler('quotelist', get_quotes)
@@ -274,6 +275,7 @@ def main():
     )
 
     dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(stop_handler)
     dispatcher.add_handler(help_handler)
     dispatcher.add_handler(program_handler)
     dispatcher.add_handler(quotes_handler)
