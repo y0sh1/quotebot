@@ -55,10 +55,10 @@ QUOTE, AUTHOR, LOCATION = range(3)
 PROGRAMMA = {
     datetime.strptime("20180508", "%Y%m%d"): "- 10:00 - 15:00 (ish) Tour door Sofia\n"
                                              "- 15:00 - 18:00 (optioneel) National Museum met de ReisCo\n"
-                                             "- 19:30 verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt"
-    datetime.strptime("20180509", "%Y%m%d"): "10:00 (optioneel) Museum van Socialistische Kunst met de Reisco\n"
-                                             "15:30 Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
-                                             "20:00 Vrije avond",
+                                             "- 19:30 verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt",
+    datetime.strptime("20180509", "%Y%m%d"): "- 10:00 (optioneel) Museum van Socialistische Kunst met de Reisco\n"
+                                             "- 15:30 Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
+                                             "- 20:00 Vrije avond",
     datetime.strptime("20180510", "%Y%m%d"): "- 10:00 verzamelen voor het hostel om naar Strypes te gaan.\n"
                                              "Na Strypes gaan we door naar het volgende bedrijf Dreamix. Hier moeten we om 16:00 aanwezig zijn\n"
                                              "- 18:00 Vrije avond",
@@ -67,7 +67,7 @@ PROGRAMMA = {
                                              "- 15:00 (ish) naar de dierentuin daar in de buurt\n"
                                              "- 21:30 (ish, optioneel) Pubcrawl, meld je aan bij de ReisCo voor morgen avond",
     datetime.strptime("20180512", "%Y%m%d"): "Vrije dag doe waar je zin in hebt...",
-    datetime.strptime("20180513", "%Y%m%d"): "10:00 ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
+    datetime.strptime("20180513", "%Y%m%d"): "- 10:00 ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
 
 }
 
