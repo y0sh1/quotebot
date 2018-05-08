@@ -53,21 +53,21 @@ if not os.path.isfile("quotes.db"):
 QUOTE, AUTHOR, LOCATION = range(3)
 
 PROGRAMMA = {
-    datetime.strptime("20180508", "%Y%m%d"): "- 10:00 - 15:00 (ish) Tour door Sofia\n"
-                                             "- 15:00 - 18:00 (optioneel) National Museum met de ReisCo\n"
-                                             "- 19:30 verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt",
-    datetime.strptime("20180509", "%Y%m%d"): "- 10:00 (optioneel) Museum van Socialistische Kunst met de Reisco\n"
-                                             "- 15:30 Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
-                                             "- 20:00 Vrije avond",
-    datetime.strptime("20180510", "%Y%m%d"): "- 10:00 verzamelen voor het hostel om naar Strypes te gaan.\n"
+    datetime.strptime("20180508", "%Y%m%d"): "- _10:00 - 15:00_ (ish) Tour door Sofia\n"
+                                             "- _15:00 - 18:00_ (optioneel) National Museum met de ReisCo\n"
+                                             "- _19:30_ verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt",
+    datetime.strptime("20180509", "%Y%m%d"): "- _10:00_ (optioneel) Museum van Socialistische Kunst met de Reisco\n"
+                                             "- _15:30_ Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
+                                             "- _20:00_ Vrije avond",
+    datetime.strptime("20180510", "%Y%m%d"): "- _10:00_ verzamelen voor het hostel om naar Strypes te gaan.\n"
                                              "Na Strypes gaan we door naar het volgende bedrijf Dreamix. Hier moeten we om 16:00 aanwezig zijn\n"
-                                             "- 18:00 Vrije avond",
+                                             "- _18:00_ Vrije avond",
     datetime.strptime("20180511", "%Y%m%d"): "- Vrije ochtend\n"
-                                             "- 11:45 verzamelen bij het hostel om samen naar de universiteit te gaan waar we om 13:00 aanwezig moeten zijn.\n"
-                                             "- 15:00 (ish) naar de dierentuin daar in de buurt\n"
-                                             "- 21:30 (ish, optioneel) Pubcrawl, meld je aan bij de ReisCo voor morgen avond",
+                                             "- _11:45_ verzamelen bij het hostel om samen naar de universiteit te gaan waar we om 13:00 aanwezig moeten zijn.\n"
+                                             "- _15:00_ (ish) naar de dierentuin daar in de buurt\n"
+                                             "- _21:30_ (ish, optioneel) Pubcrawl, meld je aan bij de ReisCo voor morgen avond",
     datetime.strptime("20180512", "%Y%m%d"): "Vrije dag doe waar je zin in hebt...",
-    datetime.strptime("20180513", "%Y%m%d"): "- 10:00 ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
+    datetime.strptime("20180513", "%Y%m%d"): "- _10:00_ ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
 
 }
 
@@ -197,7 +197,7 @@ def get_program(bot, update):
     logger.info("Nu is het %s" % now)
     for key, value in PROGRAMMA.items():
         if key == now:
-            update.message.reply_text(value)
+            update.message.reply_text(value, parse_mode="markdown")
 
 def get_hostel(bot, update):
     update.message.reply_text("Hier is het hostel:\n"
