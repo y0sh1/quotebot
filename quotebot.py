@@ -1,5 +1,5 @@
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler
-from telegram import ReplyKeyboardMarkup, Location
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, ConversationHandler, CallbackQueryHandler
+from telegram import ReplyKeyboardMarkup, Location, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
 import os
 import sys
 from sqlalchemy import Column, ForeignKey, Integer, String, Float, Text, Boolean
@@ -53,21 +53,21 @@ if not os.path.isfile("quotes.db"):
 QUOTE, AUTHOR, LOCATION = range(3)
 
 PROGRAMMA = {
-    datetime.strptime("20180508", "%Y%m%d"): "- _10:00 - 15:00_ (ish) Tour door Sofia\n"
+    datetime.strptime("20180508", "%Y%m%d").strftime("%Y%m%d"): "- _10:00 - 15:00_ (ish) Tour door Sofia\n"
                                              "- _15:00 - 18:00_ (optioneel) National Museum met de ReisCo\n"
                                              "- _19:30_ verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt",
-    datetime.strptime("20180509", "%Y%m%d"): "- _10:00_ (optioneel) Museum van Socialistische Kunst met de Reisco\n"
+    datetime.strptime("20180509", "%Y%m%d").strftime("%Y%m%d"): "- _10:00_ (optioneel) Museum van Socialistische Kunst met de Reisco\n"
                                              "- _15:30_ Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
                                              "- _20:00_ Vrije avond",
-    datetime.strptime("20180510", "%Y%m%d"): "- _10:00_ verzamelen voor het hostel om naar Strypes te gaan.\n"
+    datetime.strptime("20180510", "%Y%m%d").strftime("%Y%m%d"): "- _10:00_ verzamelen voor het hostel om naar Strypes te gaan.\n"
                                              "Na Strypes gaan we door naar het volgende bedrijf Dreamix. Hier moeten we om 16:00 aanwezig zijn\n"
                                              "- _18:00_ Vrije avond",
-    datetime.strptime("20180511", "%Y%m%d"): "- Vrije ochtend\n"
+    datetime.strptime("20180511", "%Y%m%d").strftime("%Y%m%d"): "- Vrije ochtend\n"
                                              "- _11:45_ verzamelen bij het hostel om samen naar de universiteit te gaan waar we om 13:00 aanwezig moeten zijn.\n"
                                              "- _15:00_ (ish) naar de dierentuin daar in de buurt\n"
                                              "- _21:30_ (ish, optioneel) Pubcrawl, meld je aan bij de ReisCo voor morgen avond",
-    datetime.strptime("20180512", "%Y%m%d"): "Vrije dag doe waar je zin in hebt...",
-    datetime.strptime("20180513", "%Y%m%d"): "- _10:00_ ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
+    datetime.strptime("20180512", "%Y%m%d").strftime("%Y%m%d"): "Vrije dag doe waar je zin in hebt...",
+    datetime.strptime("20180513", "%Y%m%d").strftime("%Y%m%d"): "- _10:00_ ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
 
 }
 
@@ -192,14 +192,45 @@ def get_quotes(bot, update):
     update.message.reply_text(message_string,
                               reply_markup=ReplyKeyboardMarkup(quote_keyboard))
 
-
-def get_program(bot, update):
+def select_program_day(bot, update):
     now = datetime.now()
     now = now.replace(hour=0, minute=0, second=0, microsecond=0)
-    logger.info("Nu is het %s" % now)
+    button_list = [
+        [
+            InlineKeyboardButton("Vandaag", callback_data=now.strftime("%Y%m%d")),
+
+        ],
+        [
+            InlineKeyboardButton("Dinsdag", callback_data="20180508"),
+            InlineKeyboardButton("Woensdag", callback_data="20180509"),
+        ],
+        [
+            InlineKeyboardButton("Donderdag", callback_data="20180510"),
+            InlineKeyboardButton("Vrijdag", callback_data="20180511"),
+        ],
+        [
+            InlineKeyboardButton("Zaterdag", callback_data="20180512"),
+            InlineKeyboardButton("Zondag", callback_data="20180513"),
+        ],
+    ]
+    reply_markup = InlineKeyboardMarkup(button_list)
+    bot.send_message(update.message.chat_id,"Selecteer een Dag", reply_markup=reply_markup)
+    handler = CallbackQueryHandler(get_program)
+    dispatcher.add_handler(handler)
+    return ConversationHandler.END
+
+
+
+def get_program(bot, update):
+    logger.info("Geselecteerde datum is %s" % update.callback_query.data)
     for key, value in PROGRAMMA.items():
-        if key == now:
-            update.message.reply_text(value, parse_mode="markdown")
+        logger.info('key -- %s' % key)
+        logger.info('value -- %s' % update.callback_query.data)
+        if key == update.callback_query.data:
+            bot.send_message(update.callback_query.message.chat.id, value, parse_mode="markdown")
+            logger.info("FUNCTIE IS GECALLED")
+    return ConversationHandler.END
+
 
 def get_hostel(bot, update):
     update.message.reply_text("Hier is het hostel:\n"
@@ -217,7 +248,7 @@ def main():
     start_handler = CommandHandler('start', start)
     stop_handler = CommandHandler('stop', stop)
     help_handler = CommandHandler('help', help)
-    program_handler = CommandHandler('programma', get_program)
+    program_handler = CommandHandler('programma', select_program_day)
     quotes_handler = CommandHandler('quotelist', get_quotes)
     hostel_handler = CommandHandler('hostel', get_hostel)
     uptime_handler = CommandHandler('uptime', get_uptime)
