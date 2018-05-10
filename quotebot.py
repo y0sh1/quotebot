@@ -53,21 +53,27 @@ if not os.path.isfile("quotes.db"):
 QUOTE, AUTHOR, LOCATION = range(3)
 
 PROGRAMMA = {
-    datetime.strptime("20180508", "%Y%m%d").strftime("%Y%m%d"): "- _10:00 - 15:00_ (ish) Tour door Sofia\n"
-                                             "- _15:00 - 18:00_ (optioneel) National Museum met de ReisCo\n"
-                                             "- _19:30_ verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt",
-    datetime.strptime("20180509", "%Y%m%d").strftime("%Y%m%d"): "- _10:00_ (optioneel) Museum van Socialistische Kunst met de Reisco\n"
-                                             "- _15:30_ Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
-                                             "- _20:00_ Vrije avond",
-    datetime.strptime("20180510", "%Y%m%d").strftime("%Y%m%d"): "- _10:00_ verzamelen voor het hostel om naar Strypes te gaan.\n"
-                                             "Na Strypes gaan we door naar het volgende bedrijf Dreamix. Hier moeten we om 16:00 aanwezig zijn\n"
-                                             "- _18:00_ Vrije avond",
-    datetime.strptime("20180511", "%Y%m%d").strftime("%Y%m%d"): "- Vrije ochtend\n"
-                                             "- _11:45_ verzamelen bij het hostel om samen naar de universiteit te gaan waar we om 13:00 aanwezig moeten zijn.\n"
-                                             "- _15:00_ (ish) naar de dierentuin daar in de buurt\n"
-                                             "- _21:30_ (ish, optioneel) Pubcrawl, meld je aan bij de ReisCo voor morgen avond",
-    datetime.strptime("20180512", "%Y%m%d").strftime("%Y%m%d"): "Vrije dag doe waar je zin in hebt...",
-    datetime.strptime("20180513", "%Y%m%d").strftime("%Y%m%d"): "- _10:00_ ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
+    "20180508": "Programma voor Dinsdag\n"
+                "- _10:00 - 15:00_ (ish) Tour door Sofia\n"
+                "- _15:00 - 18:00_ (optioneel) National Museum met de ReisCo\n"
+                "- _19:30_ verzamelen voor een gezamelijk avondeten bij een hippe tent in de buurt",
+    "20180509": "Programma voor Woensdag\n"  
+                "- _10:00_ (optioneel) Museum van Socialistische Kunst met de Reisco\n"
+                "- _15:30_ Geheime activiteit: Voor iedereen is al betaald dus wees erbij! Verzamelen voor het hostel\n"
+                "- _20:00_ Vrije avond",
+    "20180510": "Programma voor Donderdag\n"  
+                "- _10:00_ verzamelen voor het hostel om naar Strypes te gaan.\n"
+                "Na Strypes gaan we door naar het volgende bedrijf Dreamix. Hier moeten we om 16:00 aanwezig zijn\n"
+                "- _18:00_ Vrije avond",
+    "20180511": "Programma voor Vrijdag\n"  
+                "- Vrije ochtend\n"
+               "- _11:45_ verzamelen bij het hostel om samen naar de universiteit te gaan waar we om 13:00 aanwezig moeten zijn.\n"
+               "- _15:00_ (ish) naar de dierentuin daar in de buurt\n"
+               "- _21:30_ (ish, optioneel) Pubcrawl, meld je aan bij de ReisCo voor morgen avond",
+    "20180512": "Programma voor Zaterdag\n"  
+                "Vrije dag doe waar je zin in hebt...",
+    "20180513": "Programma voor Zondag\n"  
+                "- _10:00_ ingepakt en wel verzamelen bij het hostel we gaan weer naar het vliegtuig."
 
 }
 
@@ -215,8 +221,6 @@ def select_program_day(bot, update):
     ]
     reply_markup = InlineKeyboardMarkup(button_list)
     bot.send_message(update.message.chat_id,"Selecteer een Dag", reply_markup=reply_markup)
-    handler = CallbackQueryHandler(get_program)
-    dispatcher.add_handler(handler)
     return ConversationHandler.END
 
 
@@ -229,8 +233,6 @@ def get_program(bot, update):
         if key == update.callback_query.data:
             bot.send_message(update.callback_query.message.chat.id, value, parse_mode="markdown")
             logger.info("FUNCTIE IS GECALLED")
-    return ConversationHandler.END
-
 
 def get_hostel(bot, update):
     update.message.reply_text("Hier is het hostel:\n"
@@ -277,7 +279,9 @@ def main():
     dispatcher.add_handler(uptime_handler)
 
     dispatcher.add_handler(quote_conv_handler)
-
+    
+    handler = CallbackQueryHandler(get_program)
+    dispatcher.add_handler(handler)            
     updater.start_polling()
     # updater.idle()
 
